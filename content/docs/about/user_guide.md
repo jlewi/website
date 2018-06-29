@@ -570,7 +570,23 @@ Updating your deployments is a two step process
   1. Use the script (upgrade_ks_app.py)[https://github.com/kubeflow/kubeflow/tree/master/scripts)
      to update your ksonnet app with the current version for the Kubeflow packages
   1. Note: ksonnet is working on support for this see https://github.com/ksonnet/ksonnet/issues/237
-  
+  1. Remove and re-add the Kubeflow core component in order to pick up all the changes
+
+     ```
+     ks component rm ${CORE_COMPONENT} 
+     ```
+
+     * If the above step fails remove it manually by 
+
+       1. Deleting `components/${CORE_COMPONENT}.jsonnet`
+       1. Open `components/params.libsonnet` and remove the entry for ${CORE_COMPONENT}
+
+    
+     * Regenerate the component
+     
+       ```
+       ks generate kubeflow-core ${CORE_COMPONET}
+       ```
 1. Updating the actual deployment
 
   1. Delete TFJobs v1alpha1 because K8s can't deploy multiple versions of a CRD
